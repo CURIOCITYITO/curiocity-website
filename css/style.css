@@ -382,6 +382,53 @@ textarea {
 }
 
 /* ==========================================================================
+   MARQUEE
+   ========================================================================== */
+
+.marquee {
+  background: var(--color-black);
+  overflow: hidden;
+  padding: 32px 0;
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 22s linear infinite;
+}
+
+.marquee__group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.marquee__group span {
+  font-family: var(--font-en);
+  font-size: clamp(1.6rem, 4.5vw, 3.2rem);
+  color: var(--color-white);
+  white-space: nowrap;
+  padding: 0 28px;
+  position: relative;
+}
+
+.marquee__group span::after {
+  content: '—';
+  position: absolute;
+  right: -6px;
+  color: var(--color-gray);
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ==========================================================================
    WORKS
    ========================================================================== */
 
@@ -810,6 +857,10 @@ textarea {
   }
 
   .hero__scroll-line::after {
+    animation: none;
+  }
+
+  .marquee__track {
     animation: none;
   }
 }
