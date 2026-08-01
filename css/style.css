@@ -409,14 +409,6 @@ textarea {
   color: var(--color-white);
   white-space: nowrap;
   padding: 0 28px;
-  position: relative;
-}
-
-.marquee__group span::after {
-  content: '—';
-  position: absolute;
-  right: -6px;
-  color: var(--color-gray);
 }
 
 @keyframes marquee-scroll {
