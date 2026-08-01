@@ -414,7 +414,7 @@ textarea {
 .marquee {
   background: var(--color-black);
   overflow: hidden;
-  padding: 16px 0;
+  padding: 8px 0;
   animation: marquee-blink-bg 2s steps(1) infinite;
 }
 
@@ -432,10 +432,10 @@ textarea {
 
 .marquee__group span {
   font-family: var(--font-en);
-  font-size: clamp(1.6rem, 4.5vw, 3.2rem);
+  font-size: clamp(1.1rem, 3vw, 2rem);
   color: var(--color-white);
   white-space: nowrap;
-  padding: 0 28px;
+  padding: 0 24px;
   animation: marquee-blink-text 2s steps(1) infinite;
 }
 
