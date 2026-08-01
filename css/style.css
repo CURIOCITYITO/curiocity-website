@@ -561,6 +561,59 @@ textarea {
 }
 
 /* ==========================================================================
+   LEGAL PAGES (Privacy Policy / Terms of Use)
+   ========================================================================== */
+
+.legal {
+  padding: var(--section-padding);
+}
+
+.legal--page {
+  padding-top: calc(var(--header-height) + 80px);
+}
+
+.legal__updated {
+  color: var(--color-gray);
+  font-size: 0.85rem;
+  margin-bottom: 56px;
+}
+
+.legal__content {
+  max-width: 760px;
+}
+
+.legal__content h2 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: 56px;
+  margin-bottom: 16px;
+}
+
+.legal__content h2:first-child {
+  margin-top: 0;
+}
+
+.legal__content p {
+  color: var(--color-gray);
+  line-height: 1.9;
+}
+
+.legal__content p + p {
+  margin-top: 1.4em;
+}
+
+.legal__content ul {
+  color: var(--color-gray);
+  line-height: 1.9;
+  padding-left: 1.4em;
+  margin-top: 1em;
+}
+
+.legal__content li + li {
+  margin-top: 0.4em;
+}
+
+/* ==========================================================================
    FOOTER
    ========================================================================== */
 
@@ -593,7 +646,7 @@ textarea {
   letter-spacing: 0.06em;
 }
 
-.footer__sns {
+.footer__legal {
   display: flex;
   gap: 24px;
   font-family: var(--font-en);
@@ -641,6 +694,10 @@ textarea {
   }
 
   .works--page {
+    padding-top: calc(var(--header-height-sp) + 48px);
+  }
+
+  .legal--page {
     padding-top: calc(var(--header-height-sp) + 48px);
   }
 
