@@ -510,30 +510,34 @@ textarea {
 
 .service-item {
   display: flex;
-  gap: 48px;
-  padding: 48px 0;
+  align-items: baseline;
+  gap: 40px;
+  padding: 52px 0;
   border-bottom: 1px solid var(--color-border);
   transition: padding 0.4s var(--ease);
 }
 
 .service-item__num {
   font-family: var(--font-en);
-  font-size: 1.1rem;
-  color: var(--color-gray);
+  font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+  font-weight: 500;
+  color: var(--color-border);
   flex-shrink: 0;
-  width: 48px;
+  width: 64px;
 }
 
 .service-item__title {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 500;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+  color: var(--color-dark);
 }
 
 .service-item__text {
   color: var(--color-gray);
   max-width: 560px;
-  font-size: 0.95rem;
+  font-size: 1rem;
+  line-height: 1.9;
 }
 
 /* ==========================================================================
@@ -814,7 +818,8 @@ textarea {
 
   .service-item {
     flex-direction: column;
-    gap: 16px;
+    align-items: flex-start;
+    gap: 12px;
     padding: 32px 0;
   }
 
