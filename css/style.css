@@ -397,6 +397,10 @@ textarea {
   padding: var(--section-padding);
 }
 
+#about .section-title {
+  transition-duration: 2s;
+}
+
 .about__text {
   max-width: 640px;
   color: var(--color-gray);
