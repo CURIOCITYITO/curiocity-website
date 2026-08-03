@@ -76,17 +76,49 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
+    const STREAM_COLORS = [
+      [255, 45, 138],  // pink
+      [123, 47, 247],  // purple
+      [40, 110, 255],  // blue
+      [0, 209, 193],   // turquoise
+    ];
+
+    const lerp = (a, b, t) => a + (b - a) * t;
+
+    const streamColor = (t) => {
+      const scaled = Math.max(0, Math.min(1, t)) * (STREAM_COLORS.length - 1);
+      const i = Math.min(STREAM_COLORS.length - 2, Math.floor(scaled));
+      const localT = scaled - i;
+      const c1 = STREAM_COLORS[i];
+      const c2 = STREAM_COLORS[i + 1];
+      return [
+        Math.round(lerp(c1[0], c2[0], localT)),
+        Math.round(lerp(c1[1], c2[1], localT)),
+        Math.round(lerp(c1[2], c2[2], localT)),
+      ];
+    };
+
     const createParticles = () => {
+      const waveCount = 0.85;
+      const amplitude = height * 0.22;
+      const baseline = height * 0.52;
+      const bandWidth = height * 0.16;
+
       particles = Array.from({ length: PARTICLE_COUNT }, () => {
-        const baseX = Math.random() * width;
-        const baseY = Math.random() * height;
+        const t = Math.random();
+        const spread = ((Math.random() + Math.random() + Math.random()) / 3 - 0.5) * 2 * bandWidth;
+        const pathX = t * width;
+        const pathY = baseline + Math.sin(t * Math.PI * 2 * waveCount) * amplitude + spread;
+        const [cr, cg, cb] = streamColor(t);
+
         return {
-          baseX,
-          baseY,
-          x: baseX,
-          y: baseY,
-          r: Math.random() * 1.2 + 0.4,
-          alpha: Math.random() * 0.22 + 0.08,
+          baseX: pathX,
+          baseY: pathY,
+          x: pathX,
+          y: pathY,
+          r: Math.random() * 1.4 + 0.5,
+          alpha: Math.random() * 0.35 + 0.35,
+          color: `${cr}, ${cg}, ${cb}`,
           angle: Math.random() * Math.PI * 2,
           speed: Math.random() * 0.6 + 0.3,
         };
@@ -98,8 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       particles.forEach((p) => {
         p.angle += 0.004 * p.speed;
-        let targetX = p.baseX + Math.cos(p.angle) * 8;
-        let targetY = p.baseY + Math.sin(p.angle * 1.3) * 8;
+        let targetX = p.baseX + Math.cos(p.angle) * 6;
+        let targetY = p.baseY + Math.sin(p.angle * 1.3) * 6;
 
         if (mouse.active) {
           const dx = mouse.x - p.x;
@@ -117,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(26, 26, 26, ${p.alpha})`;
+        ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
         ctx.fill();
       });
     };
