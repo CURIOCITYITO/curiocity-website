@@ -428,19 +428,6 @@ textarea {
   mask-image: radial-gradient(circle at var(--spot-x, -50%) var(--spot-y, -50%), transparent 0px, transparent var(--spot-r-in, 120px), white var(--spot-r-out, 210px));
 }
 
-.about__motion {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.about__canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
 #about .section-title {
   transition-duration: 2s;
 }
