@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  /* ---------- Mobile nav toggle ---------- */
+  /* ---------- Nav overlay toggle ---------- */
   const closeNav = () => {
     headerNav.classList.remove('is-open');
     navToggle.setAttribute('aria-expanded', 'false');
@@ -30,6 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   navLinks.forEach((link) => link.addEventListener('click', closeNav));
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && navToggle.getAttribute('aria-expanded') === 'true') {
+      closeNav();
+    }
+  });
 
   /* ---------- Scroll reveal ---------- */
   const revealTargets = document.querySelectorAll('[data-reveal]');
@@ -50,6 +56,29 @@ document.addEventListener('DOMContentLoaded', () => {
     revealTargets.forEach((el) => observer.observe(el));
   } else {
     revealTargets.forEach((el) => el.classList.add('is-visible'));
+  }
+
+  /* ---------- Text reveal (gray sweep, then final color) ---------- */
+  const textRevealTargets = document.querySelectorAll('.text-reveal');
+
+  if (textRevealTargets.length) {
+    if ('IntersectionObserver' in window) {
+      const textRevealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-revealing');
+              textRevealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.5 }
+      );
+
+      textRevealTargets.forEach((el) => textRevealObserver.observe(el));
+    } else {
+      textRevealTargets.forEach((el) => el.classList.add('is-revealing'));
+    }
   }
 
   /* ---------- Hero title: roulette-style scramble reveal ---------- */

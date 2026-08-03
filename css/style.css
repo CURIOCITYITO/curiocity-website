@@ -89,6 +89,43 @@ textarea {
   transform: translateY(0);
 }
 
+/* ---------- Text reveal (gray sweep, then final color) ---------- */
+.text-reveal {
+  display: inline-block;
+  position: relative;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.text-reveal::before,
+.text-reveal::after {
+  content: attr(data-text);
+  display: inline-block;
+  white-space: pre-wrap;
+}
+
+.text-reveal::before {
+  color: var(--color-gray);
+  clip-path: inset(0 100% 0 0);
+}
+
+.text-reveal::after {
+  position: absolute;
+  inset: 0;
+  color: inherit;
+  clip-path: inset(0 100% 0 0);
+}
+
+.text-reveal.is-revealing::before {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.8s var(--ease);
+}
+
+.text-reveal.is-revealing::after {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.8s var(--ease) 0.15s;
+}
+
 /* ---------- Buttons ---------- */
 .btn-outline {
   display: inline-flex;
@@ -403,10 +440,6 @@ textarea {
   height: 100%;
 }
 
-#about .section-title {
-  transition-duration: 2s;
-}
-
 .about__text {
   max-width: 640px;
   color: #4a4a4a;
@@ -416,6 +449,10 @@ textarea {
 
 .about__text p + p {
   margin-top: 1.6em;
+}
+
+.about__cta {
+  margin-top: 40px;
 }
 
 /* ==========================================================================
@@ -680,6 +717,111 @@ textarea {
 }
 
 /* ==========================================================================
+   ABOUT HERO (about.html)
+   ========================================================================== */
+
+.about-hero {
+  position: relative;
+  overflow: hidden;
+  padding-top: calc(var(--header-height) + 120px);
+  padding-bottom: 120px;
+}
+
+.about-hero__motion {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.about-hero .section-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.about-hero__title {
+  font-family: var(--font-logo);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3.6vw, 2.5rem);
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  max-width: 900px;
+  margin-bottom: 48px;
+}
+
+.about-hero__lead {
+  max-width: 720px;
+  color: #4a4a4a;
+  font-size: 1.05rem;
+  line-height: 2;
+}
+
+.about-hero__lead p + p {
+  margin-top: 1.6em;
+}
+
+/* ---------- Ripple motion (multiple overlapping sources) ---------- */
+.ripple-group {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+}
+
+.ripple-group--1 { top: 15%; left: 68%; }
+.ripple-group--2 { top: 38%; left: 92%; }
+.ripple-group--3 { top: 58%; left: 58%; }
+.ripple-group--4 { top: 78%; left: 86%; }
+.ripple-group--5 { top: 92%; left: 42%; }
+
+.ripple {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 140px;
+  height: 140px;
+  border: 1px solid rgba(110, 110, 110, 0.32);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.2);
+  opacity: 0;
+  animation: ripple-expand 5.5s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+}
+
+.ripple-group--1 .ripple { animation-duration: 5.5s; animation-delay: 0s; }
+.ripple-group--1 .ripple:nth-child(2) { animation-delay: 1.8s; }
+.ripple-group--1 .ripple:nth-child(3) { animation-delay: 3.6s; }
+
+.ripple-group--2 .ripple { animation-duration: 6.5s; animation-delay: 0.8s; width: 110px; height: 110px; }
+.ripple-group--2 .ripple:nth-child(2) { animation-delay: 2.9s; }
+.ripple-group--2 .ripple:nth-child(3) { animation-delay: 5s; }
+
+.ripple-group--3 .ripple { animation-duration: 4.8s; animation-delay: 2.2s; width: 160px; height: 160px; }
+.ripple-group--3 .ripple:nth-child(2) { animation-delay: 3.8s; }
+.ripple-group--3 .ripple:nth-child(3) { animation-delay: 5.4s; }
+
+.ripple-group--4 .ripple { animation-duration: 7s; animation-delay: 1.5s; width: 100px; height: 100px; }
+.ripple-group--4 .ripple:nth-child(2) { animation-delay: 3.8s; }
+.ripple-group--4 .ripple:nth-child(3) { animation-delay: 6.1s; }
+
+.ripple-group--5 .ripple { animation-duration: 6s; animation-delay: 3.2s; width: 130px; height: 130px; }
+.ripple-group--5 .ripple:nth-child(2) { animation-delay: 5.2s; }
+.ripple-group--5 .ripple:nth-child(3) { animation-delay: 7.2s; }
+
+@keyframes ripple-expand {
+  0% {
+    transform: translate(-50%, -50%) scale(0.2);
+    opacity: 0.5;
+  }
+  70% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(5.5);
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
    LEGAL PAGES (Privacy Policy / Terms of Use)
    ========================================================================== */
 
@@ -927,6 +1069,20 @@ textarea {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .text-reveal::before,
+  .text-reveal::after {
+    transition: none;
+  }
+
+  .text-reveal::after {
+    clip-path: inset(0 0 0 0);
+  }
+
+  .ripple {
+    animation: none;
+    opacity: 0;
   }
 
   .hero__scroll-line::after {
