@@ -273,7 +273,7 @@ textarea {
 }
 
 .hero__title {
-  font-family: var(--font-en);
+  font-family: var(--font-logo);
   font-weight: 700;
   line-height: 1.25;
   font-size: clamp(1.9rem, 5.2vw, 4.2rem);
@@ -459,7 +459,7 @@ textarea {
 }
 
 .marquee__group span {
-  font-family: var(--font-en);
+  font-family: var(--font-logo);
   font-size: clamp(1.1rem, 3vw, 2rem);
   color: var(--color-white);
   white-space: nowrap;
