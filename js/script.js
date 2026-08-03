@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctx = canvas.getContext('2d');
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const PARTICLE_COUNT = 550;
+    const PARTICLE_COUNT = 1400;
     const MOUSE_RADIUS = 260;
 
     let width = 0;
@@ -98,17 +98,42 @@ document.addEventListener('DOMContentLoaded', () => {
       ];
     };
 
-    const createParticles = () => {
-      const waveCount = 0.85;
+    const SPIRAL_START = 0.72;
+
+    const streamPoint = (t) => {
+      const waveCount = 0.7;
       const amplitude = height * 0.22;
       const baseline = height * 0.52;
-      const bandWidth = height * 0.16;
+      const pathX = t * width;
+      const pathY = baseline + Math.sin(t * Math.PI * 2 * waveCount) * amplitude;
+
+      if (t <= SPIRAL_START) {
+        return { x: pathX, y: pathY };
+      }
+
+      const spiralCenterX = width * 0.84;
+      const spiralCenterY = baseline + Math.sin(SPIRAL_START * Math.PI * 2 * waveCount) * amplitude - height * 0.05;
+      const spiralT = (t - SPIRAL_START) / (1 - SPIRAL_START);
+      const spiralAngle = -Math.PI * 0.3 + spiralT * Math.PI * 3.2;
+      const spiralRadius = (1 - spiralT * 0.92) * height * 0.24;
+
+      return {
+        x: lerp(pathX, spiralCenterX + Math.cos(spiralAngle) * spiralRadius, spiralT),
+        y: lerp(pathY, spiralCenterY + Math.sin(spiralAngle) * spiralRadius, spiralT),
+      };
+    };
+
+    const createParticles = () => {
+      const bandWidth = height * 0.1;
 
       particles = Array.from({ length: PARTICLE_COUNT }, () => {
         const t = Math.random();
-        const spread = ((Math.random() + Math.random() + Math.random()) / 3 - 0.5) * 2 * bandWidth;
-        const pathX = t * width;
-        const pathY = baseline + Math.sin(t * Math.PI * 2 * waveCount) * amplitude + spread;
+        const spreadFactor = t > SPIRAL_START ? 0.5 : 1;
+        const spread = ((Math.random() + Math.random() + Math.random()) / 3 - 0.5) * 2 * bandWidth * spreadFactor;
+        const point = streamPoint(t);
+        const angleToCenter = Math.atan2(1, 1);
+        const pathX = point.x + Math.cos(angleToCenter) * spread;
+        const pathY = point.y + Math.sin(angleToCenter) * spread;
         const [cr, cg, cb] = streamColor(t);
 
         return {
@@ -116,8 +141,8 @@ document.addEventListener('DOMContentLoaded', () => {
           baseY: pathY,
           x: pathX,
           y: pathY,
-          r: Math.random() * 1.4 + 0.5,
-          alpha: Math.random() * 0.35 + 0.35,
+          r: Math.random() * 1.6 + 0.5,
+          alpha: Math.random() * 0.35 + 0.55,
           color: `${cr}, ${cg}, ${cb}`,
           angle: Math.random() * Math.PI * 2,
           speed: Math.random() * 0.6 + 0.3,
