@@ -98,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
       ];
     };
 
-    const SPIRAL_START = 0.72;
     let flowTime = 0;
 
     const streamPoint = (t, flow) => {
@@ -107,21 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const baseline = height * 0.52;
       const pathX = t * width;
       const pathY = baseline + Math.sin(t * Math.PI * 2 * waveCount + flow * 0.6) * amplitude;
-
-      if (t <= SPIRAL_START) {
-        return { x: pathX, y: pathY };
-      }
-
-      const spiralCenterX = width * 0.84;
-      const spiralCenterY = baseline + Math.sin(SPIRAL_START * Math.PI * 2 * waveCount + flow * 0.6) * amplitude - height * 0.05;
-      const spiralT = (t - SPIRAL_START) / (1 - SPIRAL_START);
-      const spiralAngle = -Math.PI * 0.3 + spiralT * Math.PI * 3.2 + flow;
-      const spiralRadius = (1 - spiralT * 0.92) * height * 0.24;
-
-      return {
-        x: lerp(pathX, spiralCenterX + Math.cos(spiralAngle) * spiralRadius, spiralT),
-        y: lerp(pathY, spiralCenterY + Math.sin(spiralAngle) * spiralRadius, spiralT),
-      };
+      return { x: pathX, y: pathY };
     };
 
     const createParticles = () => {
@@ -129,8 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       particles = Array.from({ length: PARTICLE_COUNT }, () => {
         const t = Math.random();
-        const spreadFactor = t > SPIRAL_START ? 0.5 : 1;
-        const spread = ((Math.random() + Math.random() + Math.random()) / 3 - 0.5) * 2 * bandWidth * spreadFactor;
+        const spread = ((Math.random() + Math.random() + Math.random()) / 3 - 0.5) * 2 * bandWidth;
         const point = streamPoint(t, flowTime);
         const [cr, cg, cb] = streamColor(t);
 
