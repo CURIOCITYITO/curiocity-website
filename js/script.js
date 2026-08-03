@@ -99,22 +99,23 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const SPIRAL_START = 0.72;
+    let flowTime = 0;
 
-    const streamPoint = (t) => {
+    const streamPoint = (t, flow) => {
       const waveCount = 0.7;
       const amplitude = height * 0.22;
       const baseline = height * 0.52;
       const pathX = t * width;
-      const pathY = baseline + Math.sin(t * Math.PI * 2 * waveCount) * amplitude;
+      const pathY = baseline + Math.sin(t * Math.PI * 2 * waveCount + flow * 0.6) * amplitude;
 
       if (t <= SPIRAL_START) {
         return { x: pathX, y: pathY };
       }
 
       const spiralCenterX = width * 0.84;
-      const spiralCenterY = baseline + Math.sin(SPIRAL_START * Math.PI * 2 * waveCount) * amplitude - height * 0.05;
+      const spiralCenterY = baseline + Math.sin(SPIRAL_START * Math.PI * 2 * waveCount + flow * 0.6) * amplitude - height * 0.05;
       const spiralT = (t - SPIRAL_START) / (1 - SPIRAL_START);
-      const spiralAngle = -Math.PI * 0.3 + spiralT * Math.PI * 3.2;
+      const spiralAngle = -Math.PI * 0.3 + spiralT * Math.PI * 3.2 + flow;
       const spiralRadius = (1 - spiralT * 0.92) * height * 0.24;
 
       return {
@@ -130,17 +131,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const t = Math.random();
         const spreadFactor = t > SPIRAL_START ? 0.5 : 1;
         const spread = ((Math.random() + Math.random() + Math.random()) / 3 - 0.5) * 2 * bandWidth * spreadFactor;
-        const point = streamPoint(t);
-        const angleToCenter = Math.atan2(1, 1);
-        const pathX = point.x + Math.cos(angleToCenter) * spread;
-        const pathY = point.y + Math.sin(angleToCenter) * spread;
+        const point = streamPoint(t, flowTime);
         const [cr, cg, cb] = streamColor(t);
 
         return {
-          baseX: pathX,
-          baseY: pathY,
-          x: pathX,
-          y: pathY,
+          t,
+          spread,
+          x: point.x,
+          y: point.y,
           r: Math.random() * 1.6 + 0.5,
           alpha: Math.random() * 0.35 + 0.55,
           color: `${cr}, ${cg}, ${cb}`,
@@ -153,10 +151,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
 
+      if (!mouse.active) {
+        flowTime += 0.0035;
+      }
+
       particles.forEach((p) => {
         p.angle += 0.004 * p.speed;
-        let targetX = p.baseX + Math.cos(p.angle) * 6;
-        let targetY = p.baseY + Math.sin(p.angle * 1.3) * 6;
+        const point = streamPoint(p.t, flowTime);
+        let targetX = point.x + p.spread + Math.cos(p.angle) * 6;
+        let targetY = point.y + Math.sin(p.angle * 1.3) * 6;
 
         if (mouse.active) {
           const dx = mouse.x - p.x;
