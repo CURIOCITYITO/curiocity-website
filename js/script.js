@@ -169,16 +169,37 @@ document.addEventListener('DOMContentLoaded', () => {
       requestAnimationFrame(loop);
     };
 
+    const overlay = document.getElementById('about-overlay');
+    const bgVideo = aboutSection.querySelector('.about__video-bg video');
+
     const handlePointerMove = (event) => {
       const rect = aboutSection.getBoundingClientRect();
       const x = event.clientX - rect.left;
       const y = event.clientY - rect.top;
-      if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+      const inside = x >= 0 && x <= rect.width && y >= 0 && y <= rect.height;
+
+      if (inside) {
         mouse.x = x;
         mouse.y = y;
         mouse.active = true;
       } else {
         mouse.active = false;
+      }
+
+      if (overlay) {
+        if (inside) {
+          overlay.style.setProperty('--spot-x', `${x}px`);
+          overlay.style.setProperty('--spot-y', `${y}px`);
+          if (bgVideo && bgVideo.paused) {
+            bgVideo.play().catch(() => {});
+          }
+        } else {
+          overlay.style.setProperty('--spot-x', '-9999px');
+          overlay.style.setProperty('--spot-y', '-9999px');
+          if (bgVideo && !bgVideo.paused) {
+            bgVideo.pause();
+          }
+        }
       }
     };
 
@@ -199,9 +220,9 @@ document.addEventListener('DOMContentLoaded', () => {
       draw();
     } else {
       loop();
-      window.addEventListener('pointermove', handlePointerMove, { passive: true });
     }
 
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
     window.addEventListener('resize', handleResize);
   }
 });

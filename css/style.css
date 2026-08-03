@@ -404,13 +404,34 @@ textarea {
 
 .about > .section-inner {
   position: relative;
+  z-index: 3;
+}
+
+.about__video-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.about__video-bg video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about__overlay {
+  position: absolute;
+  inset: 0;
   z-index: 1;
+  background: var(--color-white);
+  -webkit-mask-image: radial-gradient(circle at var(--spot-x, -50%) var(--spot-y, -50%), transparent 0px, transparent var(--spot-r-in, 120px), white var(--spot-r-out, 210px));
+  mask-image: radial-gradient(circle at var(--spot-x, -50%) var(--spot-y, -50%), transparent 0px, transparent var(--spot-r-in, 120px), white var(--spot-r-out, 210px));
 }
 
 .about__motion {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 2;
   pointer-events: none;
 }
 
