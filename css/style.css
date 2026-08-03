@@ -11,8 +11,9 @@
   --color-light-gray: #ececec;
   --color-border: #e0e0e0;
 
-  --font-en: 'Futura', 'Jost', 'Avenir Next', sans-serif;
-  --font-jp: 'Zen Kaku Gothic New', sans-serif;
+  --font-en: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-jp: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', YuGothic, 'Zen Kaku Gothic New', sans-serif;
+  --font-logo: 'Futura', 'Jost', 'Avenir Next', sans-serif;
 
   --header-height: 84px;
   --header-height-sp: 64px;
@@ -38,7 +39,7 @@ body {
   color: var(--color-dark);
   background: var(--color-white);
   line-height: 1.8;
-  font-weight: 400;
+  font-weight: 600;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -142,7 +143,7 @@ textarea {
 }
 
 .header__logo {
-  font-family: var(--font-en);
+  font-family: var(--font-logo);
   font-size: 1.35rem;
   font-weight: 500;
   letter-spacing: 0.06em;
@@ -158,6 +159,7 @@ textarea {
 .nav-link {
   font-family: var(--font-en);
   font-size: 0.9rem;
+  font-weight: 600;
   letter-spacing: 0.06em;
   color: var(--color-white);
   position: relative;
@@ -272,7 +274,7 @@ textarea {
 
 .hero__title {
   font-family: var(--font-en);
-  font-weight: 400;
+  font-weight: 700;
   line-height: 1.25;
   font-size: clamp(1.9rem, 5.2vw, 4.2rem);
   letter-spacing: -0.01em;
@@ -371,6 +373,7 @@ textarea {
 .section-label {
   font-family: var(--font-en);
   font-size: 0.85rem;
+  font-weight: 600;
   letter-spacing: 0.28em;
   color: var(--color-gray);
   margin-bottom: 20px;
@@ -383,7 +386,7 @@ textarea {
 .section-title {
   font-family: var(--font-jp);
   font-size: clamp(1.7rem, 3.4vw, 2.6rem);
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1.5;
   letter-spacing: 0.02em;
   margin-bottom: 48px;
@@ -566,7 +569,7 @@ textarea {
 
 .work-card__title {
   font-size: 1.2rem;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .works__more {
@@ -609,7 +612,7 @@ textarea {
 
 .service-item__title {
   font-size: 1.6rem;
-  font-weight: 500;
+  font-weight: 700;
   margin-bottom: 18px;
   color: var(--color-dark);
 }
@@ -634,7 +637,7 @@ textarea {
 .contact__title {
   font-family: var(--font-jp);
   font-size: clamp(1.9rem, 4vw, 3rem);
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1.4;
   margin-bottom: 24px;
 }
@@ -716,7 +719,7 @@ textarea {
 
 .legal__content h2 {
   font-size: 1.2rem;
-  font-weight: 500;
+  font-weight: 700;
   margin-top: 56px;
   margin-bottom: 16px;
 }
@@ -773,7 +776,7 @@ textarea {
 }
 
 .footer__logo {
-  font-family: var(--font-en);
+  font-family: var(--font-logo);
   font-size: 1.2rem;
   font-weight: 500;
   color: var(--color-white);
