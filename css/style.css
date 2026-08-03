@@ -283,31 +283,14 @@ textarea {
 .hero__title-line {
   display: block;
   opacity: 0;
-  transform: translateY(40px);
-  animation: hero-title-fade-up 2.4s var(--ease) forwards;
 }
 
-.hero__title-line:nth-child(1) {
-  animation-delay: 0.3s;
+.hero__title-line.is-revealing {
+  opacity: 1;
 }
 
-.hero__title-line:nth-child(2) {
-  animation-delay: 0.8s;
-}
-
-.hero__title-line:nth-child(3) {
-  animation-delay: 1.3s;
-}
-
-@keyframes hero-title-fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.hero__title-char {
+  display: inline-block;
 }
 
 .hero__title-line--accent {
@@ -404,28 +387,20 @@ textarea {
 
 .about > .section-inner {
   position: relative;
-  z-index: 3;
+  z-index: 1;
 }
 
-.about__video-bg {
+.about__motion {
   position: absolute;
   inset: 0;
   z-index: 0;
+  pointer-events: none;
 }
 
-.about__video-bg video {
+.about__canvas {
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-}
-
-.about__overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: var(--color-white);
-  -webkit-mask-image: radial-gradient(circle at var(--spot-x, -50%) var(--spot-y, -50%), transparent 0px, transparent var(--spot-r-in, 120px), white var(--spot-r-out, 210px));
-  mask-image: radial-gradient(circle at var(--spot-x, -50%) var(--spot-y, -50%), transparent 0px, transparent var(--spot-r-in, 120px), white var(--spot-r-out, 210px));
 }
 
 #about .section-title {
@@ -972,9 +947,7 @@ textarea {
   }
 
   .hero__title-line {
-    animation: none;
     opacity: 1;
-    transform: none;
   }
 
 }
