@@ -395,6 +395,83 @@ textarea {
 
 .about {
   padding: var(--section-padding);
+  position: relative;
+  overflow: hidden;
+}
+
+.about > .section-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.about__motion {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.about__orb {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(26, 26, 26, 0.07), rgba(26, 26, 26, 0) 70%);
+  animation: about-orb-float 22s ease-in-out infinite;
+}
+
+.about__orb--1 {
+  width: 340px;
+  height: 340px;
+  top: 0%;
+  left: 4%;
+  animation-duration: 24s;
+}
+
+.about__orb--2 {
+  width: 220px;
+  height: 220px;
+  top: 55%;
+  left: 78%;
+  animation-duration: 28s;
+  animation-delay: -6s;
+}
+
+.about__orb--3 {
+  width: 150px;
+  height: 150px;
+  top: 10%;
+  left: 66%;
+  animation-duration: 19s;
+  animation-delay: -10s;
+}
+
+.about__orb--4 {
+  width: 280px;
+  height: 280px;
+  top: 68%;
+  left: 10%;
+  animation-duration: 26s;
+  animation-delay: -14s;
+}
+
+.about__orb--5 {
+  width: 100px;
+  height: 100px;
+  top: 38%;
+  left: 46%;
+  animation-duration: 17s;
+  animation-delay: -8s;
+}
+
+@keyframes about-orb-float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -36px) scale(1.08);
+  }
+  66% {
+    transform: translate(-24px, 26px) scale(0.94);
+  }
 }
 
 #about .section-title {
@@ -943,5 +1020,9 @@ textarea {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+
+  .about__orb {
+    animation: none;
   }
 }
