@@ -135,9 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
 
-      if (!mouse.active) {
-        flowTime += 0.018;
-      }
+      flowTime += 0.018;
 
       particles.forEach((p) => {
         p.angle += 0.004 * p.speed;
