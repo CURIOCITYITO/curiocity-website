@@ -102,10 +102,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const streamPoint = (t, flow) => {
       const waveCount = 0.7;
-      const amplitude = height * 0.22;
+      const amplitude = height * 0.3 + Math.sin(flow * 0.5) * height * 0.06;
       const baseline = height * 0.52;
       const pathX = t * width;
-      const pathY = baseline + Math.sin(t * Math.PI * 2 * waveCount + flow * 0.6) * amplitude;
+      const pathY = baseline + Math.sin(t * Math.PI * 2 * waveCount + flow) * amplitude;
       return { x: pathX, y: pathY };
     };
 
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.clearRect(0, 0, width, height);
 
       if (!mouse.active) {
-        flowTime += 0.0035;
+        flowTime += 0.018;
       }
 
       particles.forEach((p) => {
