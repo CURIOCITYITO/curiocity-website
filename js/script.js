@@ -151,156 +151,49 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ---------- About section particle field ---------- */
-  const aboutSection = document.getElementById('about');
-  const canvas = aboutSection && aboutSection.querySelector('.about__canvas');
+  /* ---------- Cursor ripples (spawn a ring where the pointer moves) ---------- */
+  const prefersReducedMotionRipple = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (aboutSection && canvas && canvas.getContext) {
-    const ctx = canvas.getContext('2d');
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const PARTICLE_COUNT = 1400;
-    const MOUSE_RADIUS = 260;
+  if (!prefersReducedMotionRipple) {
+    const MIN_DISTANCE = 140; // px the pointer must travel before the next ring
+    const MIN_INTERVAL = 450; // ms between rings
+    const MAX_RINGS = 8;
 
-    let width = 0;
-    let height = 0;
-    let particles = [];
-    const mouse = { x: 0, y: 0, active: false };
+    document.querySelectorAll('.about, .about-hero').forEach((section) => {
+      const layer = section.querySelector('.about__motion, .about-hero__motion');
+      if (!layer) return;
 
-    const resize = () => {
-      width = aboutSection.clientWidth;
-      height = aboutSection.clientHeight;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
+      let lastX = -Infinity;
+      let lastY = -Infinity;
+      let lastTime = 0;
+      let ringCount = 0;
 
-    const STREAM_COLORS = [
-      [255, 45, 138],  // pink
-      [123, 47, 247],  // purple
-      [40, 110, 255],  // blue
-      [0, 209, 193],   // turquoise
-    ];
+      section.addEventListener('pointermove', (event) => {
+        if (event.pointerType === 'touch') return;
 
-    const lerp = (a, b, t) => a + (b - a) * t;
+        const now = performance.now();
+        if (now - lastTime < MIN_INTERVAL || ringCount >= MAX_RINGS) return;
 
-    const streamColor = (t) => {
-      const scaled = Math.max(0, Math.min(1, t)) * (STREAM_COLORS.length - 1);
-      const i = Math.min(STREAM_COLORS.length - 2, Math.floor(scaled));
-      const localT = scaled - i;
-      const c1 = STREAM_COLORS[i];
-      const c2 = STREAM_COLORS[i + 1];
-      return [
-        Math.round(lerp(c1[0], c2[0], localT)),
-        Math.round(lerp(c1[1], c2[1], localT)),
-        Math.round(lerp(c1[2], c2[2], localT)),
-      ];
-    };
+        const rect = layer.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        if (Math.hypot(x - lastX, y - lastY) < MIN_DISTANCE) return;
 
-    let flowTime = 0;
+        lastX = x;
+        lastY = y;
+        lastTime = now;
+        ringCount += 1;
 
-    const streamPoint = (t, flow) => {
-      const waveCount = 0.7;
-      const amplitude = height * 0.3 + Math.sin(flow * 0.5) * height * 0.06;
-      const baseline = height * 0.52;
-      const pathX = t * width;
-      const pathY = baseline + Math.sin(t * Math.PI * 2 * waveCount + flow) * amplitude;
-      return { x: pathX, y: pathY };
-    };
-
-    const createParticles = () => {
-      const bandWidth = height * 0.1;
-
-      particles = Array.from({ length: PARTICLE_COUNT }, () => {
-        const t = Math.random();
-        const spread = ((Math.random() + Math.random() + Math.random()) / 3 - 0.5) * 2 * bandWidth;
-        const point = streamPoint(t, flowTime);
-        const [cr, cg, cb] = streamColor(t);
-
-        return {
-          t,
-          spread,
-          x: point.x,
-          y: point.y,
-          r: Math.random() * 1.6 + 0.5,
-          alpha: Math.random() * 0.35 + 0.55,
-          color: `${cr}, ${cg}, ${cb}`,
-          angle: Math.random() * Math.PI * 2,
-          speed: Math.random() * 0.6 + 0.3,
-        };
-      });
-    };
-
-    const draw = () => {
-      ctx.clearRect(0, 0, width, height);
-
-      flowTime += 0.018;
-
-      particles.forEach((p) => {
-        p.angle += 0.004 * p.speed;
-        const point = streamPoint(p.t, flowTime);
-        let targetX = point.x + p.spread + Math.cos(p.angle) * 6;
-        let targetY = point.y + Math.sin(p.angle * 1.3) * 6;
-
-        if (mouse.active) {
-          const dx = mouse.x - p.x;
-          const dy = mouse.y - p.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < MOUSE_RADIUS) {
-            const factor = (1 - dist / MOUSE_RADIUS) * 2.6;
-            targetX += dx * factor;
-            targetY += dy * factor;
-          }
-        }
-
-        p.x += (targetX - p.x) * 0.11;
-        p.y += (targetY - p.y) * 0.11;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
-        ctx.fill();
-      });
-    };
-
-    const loop = () => {
-      draw();
-      requestAnimationFrame(loop);
-    };
-
-    const handlePointerMove = (event) => {
-      const rect = aboutSection.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
-        mouse.x = x;
-        mouse.y = y;
-        mouse.active = true;
-      } else {
-        mouse.active = false;
-      }
-    };
-
-    let resizeTimer;
-    const handleResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        resize();
-        createParticles();
-        if (prefersReducedMotion) draw();
-      }, 200);
-    };
-
-    resize();
-    createParticles();
-
-    if (prefersReducedMotion) {
-      draw();
-    } else {
-      loop();
-      window.addEventListener('pointermove', handlePointerMove, { passive: true });
-    }
-
-    window.addEventListener('resize', handleResize);
+        const ring = document.createElement('span');
+        ring.className = 'ripple ripple--cursor';
+        ring.style.left = `${x}px`;
+        ring.style.top = `${y}px`;
+        ring.addEventListener('animationend', () => {
+          ring.remove();
+          ringCount -= 1;
+        });
+        layer.appendChild(ring);
+      }, { passive: true });
+    });
   }
 });
